@@ -48,9 +48,9 @@ async def decr(keys, msg, isEdmx = False):
             pass
         os.system(f"mp4decrypt --key {keys} evideo.mp4 dvideo.mp4")
         os.system(f"mp4decrypt --key {keys} eaudio.mp4 daudio.mp4")
-        if isEdmx:
+        try:
             await msg.edit_text("<i>Merging video, audio files...</i>", parse_mode='HTML')
-        else:
+        except:
             await msg.edit_message_text("<i>Merging video, audio files...</i>", parse_mode='HTML')
         os.system("ffmpeg -y -i daudio.mp4 -i dvideo.mp4 -acodec copy -vcodec copy -fflags +bitexact final.mp4")
         return "OK"
@@ -65,7 +65,10 @@ async def msgs(msg):
         try:
             txt = r.readlines()[-1]
             if txt != ntxt:
-                await msg.edit_text(f"<code>{txt}</code>", parse_mode='HTML')
+                try:
+                    await msg.edit_text(f"<code>{txt}</code>", parse_mode='HTML')
+                except:
+                    await msg.edit_message_text(f"<code>{txt}</code>", parse_mode='HTML')
                 ntxt = txt
                 sleep(3)
             else:
